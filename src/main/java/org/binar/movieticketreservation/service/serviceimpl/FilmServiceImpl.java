@@ -2,31 +2,30 @@ package org.binar.movieticketreservation.service.serviceimpl;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.binar.movieticketreservation.dto.FilmServiceInput;
 import org.binar.movieticketreservation.dto.FilmServiceOutput;
 import org.binar.movieticketreservation.entity.Film;
-import org.binar.movieticketreservation.entity.Schedule;
 import org.binar.movieticketreservation.repository.FilmRepository;
 import org.binar.movieticketreservation.repository.ScheduleRepository;
-import org.binar.movieticketreservation.repository.StudioRepository;
 import org.binar.movieticketreservation.service.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 public class FilmServiceImpl implements FilmService {
 
+    @Autowired
     private ScheduleRepository scheduleRepository;
+
+    @Autowired
     private FilmRepository filmRepository;
 
     @Autowired
     public FilmServiceImpl(
             ScheduleRepository scheduleRepository,
-            FilmRepository filmRepository,
-            StudioRepository studioRepository) {
+            FilmRepository filmRepository) {
         this.scheduleRepository = scheduleRepository;
         this.filmRepository = filmRepository;
     }
@@ -37,14 +36,8 @@ public class FilmServiceImpl implements FilmService {
         Film film = new Film();
         film.setName(filmServiceInput.getFilmName());
         film.setIsOnShow(filmServiceInput.isOnShow());
-        filmRepository.save(film);
 
-        Schedule schedule = new Schedule();
-        schedule.setFilm(film);
-        // schedule.setShowTime(filmServiceInput.getShowTime());
-        // schedule.setStartTime(filmServiceInput.getStartTime());
-        // schedule.setEndTime(filmServiceInput.getEndTime());
-        scheduleRepository.save(schedule);
+        filmRepository.save(film);
     }
 
     @Override

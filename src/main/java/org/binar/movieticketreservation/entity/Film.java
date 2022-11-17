@@ -21,7 +21,6 @@ import lombok.NoArgsConstructor;
 @SqlResultSetMapping(name = "filmMapping", classes = {
                 @ConstructorResult(targetClass = FilmServiceOutput.class, columns = {
                                 @ColumnResult(name = "film_name", type = String.class),
-                                @ColumnResult(name = "show_time", type = LocalDateTime.class),
                                 @ColumnResult(name = "start_time", type = LocalDateTime.class),
                                 @ColumnResult(name = "end_time", type = LocalDateTime.class),
                                 @ColumnResult(name = "studio_name", type = String.class)
@@ -29,7 +28,6 @@ import lombok.NoArgsConstructor;
 })
 @NamedNativeQuery(name = "Film.getAllFilmsAndSchedules", query = "select\n" +
                 "f.name as film_name,\n" +
-                "show_time,\n" +
                 "start_time,\n" +
                 "end_time,\n" +
                 "st.name as studio_name\n" +
@@ -49,7 +47,6 @@ public class Film extends BaseEntity {
         @NotNull
         private Boolean isOnShow;
 
-        @NotNull
         @OneToMany(cascade = CascadeType.ALL, mappedBy = "film", orphanRemoval = true)
         private List<Schedule> schedules;
 

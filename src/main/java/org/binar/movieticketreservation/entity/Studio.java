@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Studio extends BaseEntity {
-
     @NotNull
     private String name;
 

@@ -7,7 +7,6 @@ import org.binar.movieticketreservation.controller.TransactionController;
 import org.binar.movieticketreservation.dto.TransactionServiceInput;
 import org.binar.movieticketreservation.dto.request.OrderRequestDto;
 import org.binar.movieticketreservation.dto.request.TransactionUpdateStatusDto;
-import org.binar.movieticketreservation.entity.TransactionStatus;
 import org.binar.movieticketreservation.service.serviceimpl.TransactionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,7 +44,7 @@ public class TransactionControllerImpl implements TransactionController {
                     resp,
                     HttpStatus.ACCEPTED);
         } catch (Exception e) {
-            resp.put("message", "fail to create film : " + e.getMessage());
+            resp.put("message", "fail to create order : " + e.getMessage());
             return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -37,3 +37,13 @@ mvn clean spring-boot:run
 ```
 mvn clean package -DskipTests
 ```
+
+## TODO
+
+- [ ] validations
+- [ ] validation in request body
+- [ ] handle custom exception
+- [ ] handle http error
+- [ ] implement softdelete
+- [ ] create seeders
+- [ ] http test

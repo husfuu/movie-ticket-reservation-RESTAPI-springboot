@@ -12,9 +12,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class FilmRequestDto {
-    private String film_name;
-    private boolean is_on_show;
-    // private LocalDateTime show_time;
-    // private LocalDateTime start_time;
-    // private LocalDateTime end_time;
+    private String filmName;
+    private boolean isOnShow;
 }

@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FilmScheduleResponseDto {
     private String name;
-    private LocalDateTime showTime;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private String studioName;

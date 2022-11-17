@@ -39,11 +39,8 @@ public class FilmControllerImpl implements FilmController {
 
         try {
             FilmServiceInput filmServiceInput = new FilmServiceInput();
-            filmServiceInput.setFilmName(filmRequestDto.getFilm_name());
-            filmServiceInput.setOnShow(filmRequestDto.is_on_show());
-            // filmServiceInput.setShowTime(filmRequestDto.getShow_time());
-            // filmServiceInput.setStartTime(filmRequestDto.getStart_time());
-            // filmServiceInput.setEndTime(filmRequestDto.getEnd_time());
+            filmServiceInput.setFilmName(filmRequestDto.getFilmName());
+            filmServiceInput.setOnShow(filmRequestDto.isOnShow());
 
             filmServiceImpl.saveFilm(filmServiceInput);
 

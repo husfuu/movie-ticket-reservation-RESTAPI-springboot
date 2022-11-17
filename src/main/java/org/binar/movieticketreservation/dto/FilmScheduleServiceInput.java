@@ -1,6 +1,7 @@
 package org.binar.movieticketreservation.dto;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,9 +12,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FilmServiceOutput {
-    private String filmName;
+public class FilmScheduleServiceInput {
+    private String filmId;
+    private String studioId;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private String studioName;
 }

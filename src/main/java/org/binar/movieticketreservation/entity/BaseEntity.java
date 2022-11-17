@@ -26,8 +26,8 @@ public class BaseEntity {
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
     private String id;
 
-    private LocalDateTime created;
     @CreatedDate
+    private LocalDateTime created;
 
     @LastModifiedDate
     private LocalDateTime updated;
