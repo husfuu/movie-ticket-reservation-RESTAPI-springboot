@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -25,6 +28,10 @@ public class UserControllerImpl implements UserController {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
+    @Operation(
+        summary = "Create a new User", 
+        description = "Insert a new User into Database | Registration Process", 
+        tags = "Users")
     @Override
     @PostMapping(value = "/users")
     public ResponseEntity<?> createUser(
@@ -50,6 +57,11 @@ public class UserControllerImpl implements UserController {
         }
     }
 
+    @Operation(
+        summary = "Update User by id", 
+        description = "Update User by id", 
+        tags = "Users", 
+        security = {@SecurityRequirement(name = "bearer-key")})
     @PutMapping(value = "/users/{userId}")
     @Override
     public ResponseEntity<?> updateUser(@RequestBody UserRequestDTO userRequestDto,
@@ -73,6 +85,12 @@ public class UserControllerImpl implements UserController {
             return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Operation(
+        summary = "Delete User by id", 
+        description = "Delete User by id", 
+        tags = "Users", 
+        security = {@SecurityRequirement(name = "bearer-key")})
 
     @DeleteMapping(value = "/users/{userId}")
     @Override

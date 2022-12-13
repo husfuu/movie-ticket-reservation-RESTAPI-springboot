@@ -1,8 +1,5 @@
 package org.binar.movieticketreservation.controller.controllerimpl;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.binar.movieticketreservation.controller.ScheduleController;
 import org.binar.movieticketreservation.dto.APIResponse;
 import org.binar.movieticketreservation.dto.request.FilmScheduleDTO;
@@ -14,7 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -25,6 +23,11 @@ public class ScheduleControllerImpl implements ScheduleController {
     @Autowired
     private ScheduleServiceImpl scheduleServiceImpl;
 
+    @Operation(
+        summary = "Create a new Schedule", 
+        description = "Insert a new Schedule into Database", 
+        tags = "Schedules",
+        security = {@SecurityRequirement(name = "bearer-key")})
     @Override
     @PostMapping(value = "/schedules")
     public ResponseEntity<APIResponse> addFilmSchedule(

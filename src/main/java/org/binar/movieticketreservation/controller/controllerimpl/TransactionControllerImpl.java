@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping("/api/v1/transactions")
 @Slf4j
@@ -23,6 +26,11 @@ public class TransactionControllerImpl implements TransactionController {
         @Autowired
         private TransactionServiceImpl transactionServiceImpl;
 
+        @Operation(
+                summary = "Create a new Transaction", 
+                description = "Insert a new Transaction into Database", 
+                tags = "Transactions",
+                security = {@SecurityRequirement(name = "bearer-key")})
         @Override
         @PostMapping(value = "/orders")
         public ResponseEntity<APIResponse> createTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
@@ -39,6 +47,11 @@ public class TransactionControllerImpl implements TransactionController {
                 return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         }
 
+        @Operation(
+                summary = "Update transaction status", 
+                description = "Update transaction status by transaction id", 
+                tags = "Transactions",
+                security = {@SecurityRequirement(name = "bearer-key")})
         @PutMapping(value = "/{transactionId}")
         @Override
         public ResponseEntity<APIResponse> updateStatusTransaction(

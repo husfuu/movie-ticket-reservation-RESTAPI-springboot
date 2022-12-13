@@ -26,6 +26,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 import javax.validation.Valid;
 
 @RestController
@@ -38,6 +46,12 @@ public class FilmControllerImpl implements FilmController {
 
         @Autowired
         private RestTemplate restTemplate;
+
+        @Operation(
+                summary = "Create new Film", 
+                description = "Insert a new Film into Database", 
+                tags = "Films", 
+                security = {@SecurityRequirement(name = "bearer-key")})
 
         @Override
         @PostMapping(value = "/films")
@@ -58,6 +72,13 @@ public class FilmControllerImpl implements FilmController {
                 log.info("FilmController::createFilm success");
                 return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
         }
+
+
+        @Operation(
+                summary = "Create new Film based on upcoming films", 
+                description = "Insert a new Film that get from upcoming films into Database", 
+                tags = "Films", 
+                security = {@SecurityRequirement(name = "bearer-key")})
 
         @Override
         @PostMapping(value = "/films_provided")
@@ -91,6 +112,12 @@ public class FilmControllerImpl implements FilmController {
                 return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
         }
 
+        @Operation(
+                summary = "Update Film by Id", 
+                description = "Update Film by id", 
+                tags = "Films", 
+                security = {@SecurityRequirement(name = "bearer-key")})
+
         @PutMapping(value = "/films/{filmId}")
         @Override
         public ResponseEntity<APIResponse> updateFilmName(
@@ -110,6 +137,11 @@ public class FilmControllerImpl implements FilmController {
                 return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
         }
 
+        @Operation(
+                summary = "Delete Film by Id", 
+                description = "Delete Film by id", 
+                tags = "Films", 
+                security = {@SecurityRequirement(name = "bearer-key")})
         @DeleteMapping(value = "/films/{filmId}")
         @Override
         public ResponseEntity<APIResponse> deleteFilm(@PathVariable("filmId") String filmId) throws Exception {
@@ -123,6 +155,20 @@ public class FilmControllerImpl implements FilmController {
                 log.info("FilmController::deletedFilm success");
                 return new ResponseEntity<>(responseDTO, HttpStatus.ACCEPTED);
         }
+
+        @Operation(
+                summary = "Get all films", 
+                description = "Get a list of Films", 
+                tags = "Films", 
+                security = {@SecurityRequirement(name = "bearer-key")})
+        @ApiResponses(value = {
+                @ApiResponse(responseCode = "200", description = "Found the Films", 
+                        content = {
+                                @Content(
+                                        mediaType = "application/json",
+                                        array = @ArraySchema(schema = @Schema(implementation = FilmResponseDTO.class)))}),
+                @ApiResponse(responseCode = "404", description = "Films is not found", content = @Content)}
+        )
 
         @GetMapping(value = "/films")
         @Override
@@ -139,6 +185,20 @@ public class FilmControllerImpl implements FilmController {
                 return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         }
 
+        @Operation(
+                summary = "Get film by id", 
+                description = "Get a film based on id", 
+                tags = "Films", 
+                security = {@SecurityRequirement(name = "bearer-key")})
+        @ApiResponses(value = {
+                @ApiResponse(responseCode = "200", description = "Found the Films", 
+                        content = {
+                                @Content(
+                                        mediaType = "application/json",
+                                        schema = @Schema(implementation = FilmResponseDTO.class))}),
+                @ApiResponse(responseCode = "404", description = "Film is not found", content = @Content)}
+        )
+
         @GetMapping(value = "/films/{filmId}")
         @Override
         public ResponseEntity<APIResponse> getScheduleByFilmId(@PathVariable("filmId") String filmId) {
@@ -153,6 +213,20 @@ public class FilmControllerImpl implements FilmController {
                 log.info("FilmController::getScheduleByFilmId success");
                 return new ResponseEntity<>(responseDTO, HttpStatus.OK);
         }
+
+        @Operation(
+                summary = "Get all upcomings films", 
+                description = "Get upcomming films based on The Movie Database API | Third Party API", 
+                tags = "Films", 
+                security = {@SecurityRequirement(name = "bearer-key")})
+        @ApiResponses(value = {
+                @ApiResponse(responseCode = "200", description = "Found the Films", 
+                        content = {
+                                @Content(
+                                        mediaType = "application/json",
+                                        array = @ArraySchema(schema = @Schema(implementation = FilmResultAPIThirdPartyDTO.class)))}),
+                @ApiResponse(responseCode = "404", description = "Films is not found", content = @Content)}
+        )
 
         @GetMapping(value = "/upcoming")
         @Override
@@ -178,57 +252,3 @@ public class FilmControllerImpl implements FilmController {
                 }
         }
 }
-
-// return ResponseEntity.ok(responseEntity.getResults());
-// URI uri;
-// uri = new URI()
-
-// ResponseEntity<FilmApiThird[]> films = restTemplate.exchange(null,
-// FilmApiThird.class);
-
-// HttpHeaders headers = new HttpHeaders();
-// headers.setContentType(MediaType.APPLICATION_JSON);
-// ResponseEntity<FilmAPIThirdResponse> responseEntity =
-// restTemplate.getForObject(
-// "https://api.themoviedb.org/3/movie/upcoming?api_key=aef006e56c9f8dc32941a7503504da89&language=en-US&page=1",
-// FilmAPIThirdResponse.class);
-
-// Object object = (FilmAPIThirdResponse) responseEntity.getBody();
-
-// FilmAPIThirdResponse object = (FilmAPIThirdResponse)
-// responseEntity.getBody();
-
-// Map<String, Object> datas = object;
-
-// System.out.println("iniiiiiiiiiii:");
-// System.out.println("iniiiiiiiiiii:" + object);
-// return responseEntity;
-
-// ResponseEntity<FilmApiThird[]> films = restTemplate.getForEntity(
-// "https://api.themoviedb.org/3/movie/upcoming?api_key=aef006e56c9f8dc32941a7503504da89&language=en-US&page=1",
-// FilmApiThird[].class);
-// return films;
-// System.out.println(films);
-// return ResponseEntity.ok(films);
-
-// ===============================================================================================================
-// @GetMapping(value = "/upcomings")
-// @Override
-// public ResponseEntity<FilmApiThird[]> getAllUpcomingAPIsFilms() {
-
-// // URI uri;
-// // uri = new URI()
-
-// // ResponseEntity<FilmApiThird[]> films = restTemplate.exchange(null,
-// // FilmApiThird.class);
-
-// // HttpHeaders headers = new HttpHeaders();
-// // headers.setContentType(MediaType.APPLICATION_JSON);
-
-// FilmApiThird[] films = restTemplate.getForObject(
-// "https://api.themoviedb.org/3/movie/upcoming?api_key=aef006e56c9f8dc32941a7503504da89&language=en-US&page=1",
-// FilmApiThird[].class);
-
-// System.out.println(films);
-// return ResponseEntity.ok(films);
-// }

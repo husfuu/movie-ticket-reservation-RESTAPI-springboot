@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.Operation;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
@@ -21,6 +22,11 @@ public class InvoiceControllerImpl {
     @Autowired
     private HttpServletResponse response;
 
+    @Operation(
+        summary = "Get invoice", 
+        description = "Download invoice by transaction id", 
+        tags = "Invoice",
+        security = {@SecurityRequirement(name = "bearer-key")})
     @GetMapping(value = "/invoices/{transactionId}")
     public void getInvoiceTicket(@PathVariable("transactionId") String transactionId) throws Exception {
         try {
