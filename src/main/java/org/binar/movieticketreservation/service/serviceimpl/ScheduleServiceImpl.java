@@ -1,9 +1,12 @@
 package org.binar.movieticketreservation.service.serviceimpl;
 
-import org.binar.movieticketreservation.dto.FilmScheduleServiceInput;
+import lombok.extern.slf4j.Slf4j;
+
+import org.binar.movieticketreservation.dto.request.FilmScheduleDTO;
 import org.binar.movieticketreservation.entity.Film;
 import org.binar.movieticketreservation.entity.Schedule;
 import org.binar.movieticketreservation.entity.Studio;
+import org.binar.movieticketreservation.exception.ScheduleServiceException;
 import org.binar.movieticketreservation.repository.FilmRepository;
 import org.binar.movieticketreservation.repository.ScheduleRepository;
 import org.binar.movieticketreservation.repository.StudioRepository;
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class ScheduleServiceImpl implements ScheduleService {
 
     private ScheduleRepository scheduleRepository;
@@ -29,20 +33,27 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public void addSchedule(FilmScheduleServiceInput filmScheduleServiceInput) throws Exception {
-        Film film = filmRepository.findById(filmScheduleServiceInput.getFilmId())
-                .orElseThrow(() -> new Exception("film not found"));
+    public String addSchedule(FilmScheduleDTO filmScheduleDTO) {
+        try {
+            Film film = filmRepository.findById(filmScheduleDTO.getFilmId())
+                    .orElseThrow(() -> new Exception("film not found"));
 
-        Studio studio = studioRepository.findById(filmScheduleServiceInput.getStudioId())
-                .orElseThrow(() -> new Exception("studio not found"));
+            Studio studio = studioRepository.findById(filmScheduleDTO.getStudioId())
+                    .orElseThrow(() -> new Exception("studio not found"));
 
-        Schedule schedule = new Schedule();
-        schedule.setFilm(film);
-        schedule.setStudio(studio);
+            Schedule schedule = new Schedule();
+            schedule.setFilm(film);
+            schedule.setStudio(studio);
 
-        schedule.setStartTime(filmScheduleServiceInput.getStartTime());
-        schedule.setEndTime(filmScheduleServiceInput.getEndTime());
+            schedule.setStartTime(filmScheduleDTO.getStartTime());
+            schedule.setEndTime(filmScheduleDTO.getEndTime());
 
-        scheduleRepository.save(schedule);
+            scheduleRepository.save(schedule);
+            log.debug("success to add schedule film");
+            return "success to add schedule film";
+        } catch (Exception e) {
+            log.error("Exception occured while create schedule", e.getMessage());
+            throw new ScheduleServiceException("Exception occured while create schedule");
+        }
     }
 }

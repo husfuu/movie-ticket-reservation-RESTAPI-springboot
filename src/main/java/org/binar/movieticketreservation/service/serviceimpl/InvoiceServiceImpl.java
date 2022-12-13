@@ -45,13 +45,14 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public JasperPrint generateJasperPrint(String transactionId) throws Exception {
         try {
+            System.out.println("transactionID: " + transactionId);
             InputStream fileReport = new ClassPathResource("static/Invoice.jasper").getInputStream();
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(fileReport);
             Map<String, Object> params = new HashMap<String, Object>();
-            params.put("transaction_id", transactionId);
+            params.put("transaction_id", "%" + transactionId + "%");
 
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, getConnection());
-
+            System.out.println(jasperPrint);
             return jasperPrint;
         } catch (Exception e) {
             e.getStackTrace();

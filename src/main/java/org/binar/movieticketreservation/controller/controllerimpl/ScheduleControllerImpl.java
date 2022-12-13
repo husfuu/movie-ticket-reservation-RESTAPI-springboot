@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.binar.movieticketreservation.controller.ScheduleController;
-import org.binar.movieticketreservation.dto.FilmScheduleServiceInput;
-import org.binar.movieticketreservation.dto.request.FilmScheduleDto;
+import org.binar.movieticketreservation.dto.APIResponse;
+import org.binar.movieticketreservation.dto.request.FilmScheduleDTO;
 import org.binar.movieticketreservation.service.serviceimpl.ScheduleServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/api/v1")
+@Slf4j
 public class ScheduleControllerImpl implements ScheduleController {
 
     @Autowired
@@ -24,27 +27,18 @@ public class ScheduleControllerImpl implements ScheduleController {
 
     @Override
     @PostMapping(value = "/schedules")
-    public ResponseEntity<?> addFilmSchedule(
-            @RequestBody FilmScheduleDto filmScheduleDto) {
+    public ResponseEntity<APIResponse> addFilmSchedule(
+            @RequestBody FilmScheduleDTO filmScheduleDto) {
+        log.info("ScheduleController::addFilmSchedule success");
+        String result = scheduleServiceImpl.addSchedule(filmScheduleDto);
 
-        Map<String, Object> resp = new HashMap<>();
-        resp.put("message", "create film success");
+        APIResponse<String> response = APIResponse
+                .<String>builder()
+                .status("SUCCESS")
+                .results(result)
+                .build();
 
-        try {
-            FilmScheduleServiceInput filmScheduleServiceInput = new FilmScheduleServiceInput();
-            filmScheduleServiceInput.setStartTime(filmScheduleDto.getStartTime());
-            filmScheduleServiceInput.setEndTime(filmScheduleDto.getEndTime());
-            filmScheduleServiceInput.setFilmId(filmScheduleDto.getFilmId());
-            filmScheduleServiceInput.setStudioId(filmScheduleDto.getStudioId());
-
-            scheduleServiceImpl.addSchedule(filmScheduleServiceInput);
-
-            return new ResponseEntity<>(
-                    resp,
-                    HttpStatus.ACCEPTED);
-        } catch (Exception e) {
-            resp.put("message", "fail to create film schedule: " + e.getMessage());
-            return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        log.info("FilmScheduleController::addFilmSchedule success");
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 }

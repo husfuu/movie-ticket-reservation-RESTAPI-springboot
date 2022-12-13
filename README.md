@@ -21,6 +21,9 @@ postgres:13
 ```
 
 ##### Get in Docker database
+```
+sudo docker exec -it movie-ticket-reservation-db bash
+```
 
 ```
 psql -h 127.0.0.1 -U assignment movie_ticket_reservation_db

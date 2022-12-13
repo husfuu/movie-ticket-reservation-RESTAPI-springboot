@@ -1,19 +1,26 @@
 package org.binar.movieticketreservation.controller;
 
-import org.binar.movieticketreservation.dto.request.FilmRequestDto;
-import org.binar.movieticketreservation.dto.request.FilmUpdateNameRequestDto;
+import org.binar.movieticketreservation.dto.APIResponse;
+import org.binar.movieticketreservation.dto.request.FilmProvidedRequestDTO;
+import org.binar.movieticketreservation.dto.request.FilmRequestDTO;
+import org.binar.movieticketreservation.dto.request.FilmUpdateNameRequestDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public interface FilmController {
-    ResponseEntity<?> createFilm(FilmRequestDto filmRequestDto);
+    ResponseEntity<APIResponse> getAllUpcomingFilms();
 
-    ResponseEntity<?> updateFilmName(FilmUpdateNameRequestDto filmUpdateNameRequestDto, String filmId);
+    ResponseEntity<APIResponse> createFilm(FilmRequestDTO filmRequestDto);
 
-    ResponseEntity<?> deleteFilm(String filmId);
+    ResponseEntity<APIResponse> addFilmProvided(FilmProvidedRequestDTO filmProvidedRequestDto);
 
-    ResponseEntity<?> getAllFilms();
+    ResponseEntity<APIResponse> updateFilmName(FilmUpdateNameRequestDTO filmUpdateNameRequestDto, String filmId)
+            throws Exception;
 
-    ResponseEntity<?> getScheduleByFilmId(String filmId);
+    ResponseEntity<APIResponse> deleteFilm(String filmId) throws Exception;
+
+    ResponseEntity<APIResponse> getAllFilms();
+
+    ResponseEntity<APIResponse> getScheduleByFilmId(String filmId);
 }

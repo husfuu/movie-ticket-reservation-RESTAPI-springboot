@@ -1,12 +1,12 @@
 package org.binar.movieticketreservation.service;
 
-import org.binar.movieticketreservation.dto.TransactionServiceInput;
+import org.binar.movieticketreservation.dto.request.TransactionRequestDTO;
 import org.binar.movieticketreservation.entity.TransactionStatus;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface TransactionService {
-    void saveTransaction(TransactionServiceInput transactionServiceInput) throws Exception;
+    String saveTransaction(TransactionRequestDTO transactionRequestDTO);
 
-    void updateStatusTransaction(TransactionStatus tStatus, String transactionId) throws Exception;
+    String updateStatusTransaction(TransactionStatus tStatus, String transactionId);
 }

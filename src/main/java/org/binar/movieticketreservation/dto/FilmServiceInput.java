@@ -10,6 +10,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class FilmServiceInput {
-    private String filmName;
-    private boolean isOnShow;
+    private String name;
+    private String overview;
+    private double voteAverage;
+    private Double ticketPrice;
+    private boolean isOnShow = Boolean.TRUE;
 }

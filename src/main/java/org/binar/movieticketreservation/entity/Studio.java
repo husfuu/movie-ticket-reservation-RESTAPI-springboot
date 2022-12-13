@@ -20,7 +20,7 @@ public class Studio extends BaseEntity {
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "studio", orphanRemoval = true)
-    private List<TransactionHistory> transactionHistory;
+    private List<Transaction> transaction;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "studio", orphanRemoval = true)
     private List<Schedule> schedule;

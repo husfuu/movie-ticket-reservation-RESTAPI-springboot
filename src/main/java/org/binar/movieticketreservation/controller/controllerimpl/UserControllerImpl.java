@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.binar.movieticketreservation.controller.UserController;
 import org.binar.movieticketreservation.dto.UserServiceInput;
-import org.binar.movieticketreservation.dto.request.UserRequestDto;
+import org.binar.movieticketreservation.dto.request.UserRequestDTO;
 import org.binar.movieticketreservation.service.serviceimpl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +28,7 @@ public class UserControllerImpl implements UserController {
     @Override
     @PostMapping(value = "/users")
     public ResponseEntity<?> createUser(
-            @RequestBody UserRequestDto userRequestDto) {
+            @RequestBody UserRequestDTO userRequestDto) {
 
         Map<String, Object> resp = new HashMap<>();
         resp.put("message", "create user success");
@@ -52,7 +52,7 @@ public class UserControllerImpl implements UserController {
 
     @PutMapping(value = "/users/{userId}")
     @Override
-    public ResponseEntity<?> updateUser(@RequestBody UserRequestDto userRequestDto,
+    public ResponseEntity<?> updateUser(@RequestBody UserRequestDTO userRequestDto,
             @PathVariable("userId") String userId) {
 
         Map<String, Object> resp = new HashMap<>();

@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,6 +30,9 @@ public class Users extends BaseEntity {
     @Size(min = 8)
     private String password;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Role> roles;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users", orphanRemoval = true)
-    private List<TransactionHistory> transactionHistory;
+    private List<Transaction> transaction;
 }

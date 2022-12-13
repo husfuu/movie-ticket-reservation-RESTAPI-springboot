@@ -1,12 +1,10 @@
 package org.binar.movieticketreservation.controller.controllerimpl;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import lombok.extern.slf4j.Slf4j;
 import org.binar.movieticketreservation.controller.TransactionController;
-import org.binar.movieticketreservation.dto.TransactionServiceInput;
-import org.binar.movieticketreservation.dto.request.OrderRequestDto;
-import org.binar.movieticketreservation.dto.request.TransactionUpdateStatusDto;
+import org.binar.movieticketreservation.dto.APIResponse;
+import org.binar.movieticketreservation.dto.request.TransactionRequestDTO;
+import org.binar.movieticketreservation.dto.request.TransactionUpdateStatusRequestDTO;
 import org.binar.movieticketreservation.service.serviceimpl.TransactionServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,53 +18,45 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/transactions")
+@Slf4j
 public class TransactionControllerImpl implements TransactionController {
+        @Autowired
+        private TransactionServiceImpl transactionServiceImpl;
 
-    @Autowired
-    private TransactionServiceImpl transactionServiceImpl;
+        @Override
+        @PostMapping(value = "/orders")
+        public ResponseEntity<APIResponse> createTransaction(@RequestBody TransactionRequestDTO transactionRequestDTO) {
+                log.info("TransactionController:: createTransaction request body");
 
-    @Override
-    @PostMapping(value = "/orders")
-    public ResponseEntity<?> order(@RequestBody OrderRequestDto orderRequestDto) {
+                String result = transactionServiceImpl.saveTransaction(transactionRequestDTO);
+                APIResponse<String> response = APIResponse
+                                .<String>builder()
+                                .status("SUCCESS")
+                                .results(result)
+                                .build();
 
-        Map<String, Object> resp = new HashMap<>();
-        resp.put("message", "create film success");
-
-        try {
-            TransactionServiceInput transactionServiceInput = new TransactionServiceInput();
-            transactionServiceInput.setUserId(orderRequestDto.getUserId());
-            transactionServiceInput.setFilmId(orderRequestDto.getFilmId());
-            transactionServiceInput.setScheduleId(orderRequestDto.getScheduleId());
-            transactionServiceInput.setStudioId(orderRequestDto.getStudioId());
-
-            transactionServiceImpl.saveTransaction(transactionServiceInput);
-            return new ResponseEntity<>(
-                    resp,
-                    HttpStatus.ACCEPTED);
-        } catch (Exception e) {
-            resp.put("message", "fail to create order : " + e.getMessage());
-            return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
+                log.info("TransactionController::createTransaction success");
+                return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         }
-    }
 
-    @PutMapping(value = "/{transactionId}")
-    @Override
-    public ResponseEntity<?> updateStatusTransaction(
-            @RequestBody TransactionUpdateStatusDto transactionUpdateStatusDto,
-            @PathVariable String transactionId) {
+        @PutMapping(value = "/{transactionId}")
+        @Override
+        public ResponseEntity<APIResponse> updateStatusTransaction(
+                        @RequestBody TransactionUpdateStatusRequestDTO transactionUpdateStatusRequestDTO,
+                        @PathVariable String transactionId) {
 
-        Map<String, Object> resp = new HashMap<>();
-        resp.put("message", "create transaction success");
+                log.info("TransactionController:: updateTransaction request body");
 
-        try {
-            transactionServiceImpl.updateStatusTransaction(transactionUpdateStatusDto.getStatus(), transactionId);
-            return new ResponseEntity<>(
-                    resp,
-                    HttpStatus.ACCEPTED);
+                String result = transactionServiceImpl.updateStatusTransaction(
+                                transactionUpdateStatusRequestDTO.getStatus(),
+                                transactionId);
+                APIResponse<String> response = APIResponse
+                                .<String>builder()
+                                .status("SUCCESS")
+                                .results(result)
+                                .build();
 
-        } catch (Exception e) {
-            resp.put("message", "fail to update transaction status : " + e.getMessage());
-            return new ResponseEntity<>(resp, HttpStatus.INTERNAL_SERVER_ERROR);
+                log.info("TransactionController::updateTransaction success");
+                return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
         }
-    }
 }

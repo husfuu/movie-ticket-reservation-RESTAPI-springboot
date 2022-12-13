@@ -1,7 +1,6 @@
 package org.binar.movieticketreservation.entity;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,7 +10,8 @@ import javax.persistence.NamedNativeQuery;
 import javax.persistence.SqlResultSetMapping;
 import javax.validation.constraints.NotNull;
 
-import org.binar.movieticketreservation.dto.FilmServiceOutput;
+import org.binar.movieticketreservation.dto.response.FilmAndScheduleResponseDTO;
+import org.binar.movieticketreservation.dto.response.FilmResponseDTO;
 
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
@@ -21,7 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @SqlResultSetMapping(name = "scheduleMapping", classes = {
-                @ConstructorResult(targetClass = FilmServiceOutput.class, columns = {
+                @ConstructorResult(targetClass = FilmAndScheduleResponseDTO.class, columns = {
                                 @ColumnResult(name = "film_name", type = String.class),
                                 @ColumnResult(name = "start_time", type = LocalDateTime.class),
                                 @ColumnResult(name = "end_time", type = LocalDateTime.class),
@@ -36,7 +36,7 @@ import lombok.NoArgsConstructor;
                 "from schedule sc\n" +
                 "inner join film f on sc.film_id = f.id\n" +
                 "inner join studio st on sc.studio_id = st.id\n" +
-                "where f.is_on_show = true and sc.film_id = ?1", resultSetMapping = "scheduleMapping", resultClass = FilmServiceOutput.class)
+                "where f.is_on_show = true and sc.film_id = ?1", resultSetMapping = "scheduleMapping", resultClass = FilmResponseDTO.class)
 
 @Entity
 @Data

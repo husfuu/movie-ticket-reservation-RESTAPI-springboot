@@ -1,6 +1,5 @@
 package org.binar.movieticketreservation.entity;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,29 +11,33 @@ import javax.persistence.ConstructorResult;
 import javax.persistence.SqlResultSetMapping;
 import javax.validation.constraints.NotNull;
 
-import org.binar.movieticketreservation.dto.FilmServiceOutput;
+import org.binar.movieticketreservation.dto.response.FilmResponseDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @SqlResultSetMapping(name = "filmMapping", classes = {
-                @ConstructorResult(targetClass = FilmServiceOutput.class, columns = {
-                                @ColumnResult(name = "film_name", type = String.class),
-                                @ColumnResult(name = "start_time", type = LocalDateTime.class),
-                                @ColumnResult(name = "end_time", type = LocalDateTime.class),
-                                @ColumnResult(name = "studio_name", type = String.class)
+                @ConstructorResult(targetClass = FilmResponseDTO.class, columns = {
+                                @ColumnResult(name = "name", type = String.class),
+                                @ColumnResult(name = "overview", type = String.class),
+                                @ColumnResult(name = "vote_average", type = Double.class),
+                                @ColumnResult(name = "ticket_price", type = Double.class),
+                                @ColumnResult(name = "is_on_show", type = Boolean.class)
                 })
 })
-@NamedNativeQuery(name = "Film.getAllFilmsAndSchedules", query = "select\n" +
-                "f.name as film_name,\n" +
-                "start_time,\n" +
-                "end_time,\n" +
-                "st.name as studio_name\n" +
-                "from schedule sc\n" +
-                "inner join film f on sc.film_id = f.id\n" +
-                "inner join studio st on sc.studio_id = st.id\n" +
-                "where f.is_on_show = true", resultSetMapping = "filmMapping", resultClass = FilmServiceOutput.class)
+// @NamedNativeQuery(name = "Film.getAllFilmsAndSchedules", query = "select\n" +
+// "f.name as film_name,\n" +
+// "overview,\n" +
+// "vote_average,\n" +
+// "st.name as studio_name\n" +
+// "from schedule sc\n" +
+// "inner join film f on sc.film_id = f.id\n" +
+// "inner join studio st on sc.studio_id = st.id\n" +
+// "where f.is_on_show = true", resultSetMapping = "filmMapping", resultClass =
+// FilmResponseDTO.class)
+
+@NamedNativeQuery(name = "Film.getAllFilms", query = "select name,overview,vote_average,ticket_price,is_on_show from film f;", resultSetMapping = "filmMapping", resultClass = FilmResponseDTO.class)
 
 @Entity
 @Data
@@ -45,11 +48,20 @@ public class Film extends BaseEntity {
         private String name;
 
         @NotNull
+        private String overview;
+
+        @NotNull
+        private double voteAverage;
+
+        @NotNull
+        private Double ticketPrice;
+
+        @NotNull
         private Boolean isOnShow;
 
         @OneToMany(cascade = CascadeType.ALL, mappedBy = "film", orphanRemoval = true)
         private List<Schedule> schedules;
 
         @OneToMany(cascade = CascadeType.ALL, mappedBy = "film", orphanRemoval = true)
-        private List<TransactionHistory> transactionHistory;
+        private List<Transaction> transaction;
 }

@@ -27,7 +27,7 @@ public class InvoiceControllerImpl {
             response.setContentType("application/pdf");
             response.addHeader("Content-Disposition", "inline; filename=invoice.pdf;");
             JasperPrint jasperPrint = invoiceServiceImpl.generateJasperPrint(transactionId);
-
+            System.out.println("di controller: " + jasperPrint);
             JasperExportManager.exportReportToPdfStream(jasperPrint,
                     response.getOutputStream());
         } catch (Exception e) {
